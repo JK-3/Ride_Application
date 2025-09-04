@@ -1,7 +1,10 @@
 import express from "express";
 import UserController from '../controllers/UserController.js'
+import { sendResponse } from "../middlewares/sendResponse.js";
 
-const router = express.Router();
+const userController = new UserController(); 
+const userRouter = express.Router();
 
-router.post('/register', UserController.inse);
-router.post('/login');
+userRouter.post('/register', userController.createUser, sendResponse);
+
+export default userRouter;
