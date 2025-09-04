@@ -6,24 +6,39 @@ export const getRequestedRides = async () => {
   return rideRepo.findRequestedRides();
 };
 
+
+
 export const acceptRide = async (rideid, driverid, vehicleid) => {
   const ride = await rideRepo.findRideById(rideid);
 
   if (!ride || ride.status !== "requested") {
     throw new Error("Ride not available");
   }
-
+  
   const vehicle = await vehicleRepo.getVehicleById(vehicleid, driverid);
   if (!vehicle) {
     throw new Error("Invalid vehicle for this driver");
   }
 
-  return rideRepo.updateRide(ride, { 
-    status: "accepted", 
-    driverid, 
-    vehicleid 
+  //  if driver already has an active ride
+  const activeDriverRide = await rideRepo.findActiveRideByDriver(driverid);
+  if (activeDriverRide) {
+    throw new Error("Driver already has an active ride");
+  }
+
+  // if vehicle already has an active ride
+  const activeVehicleRide = await rideRepo.findActiveRideByVehicle(vehicleid);
+  if (activeVehicleRide) {
+    throw new Error("Vehicle is already assigned to another ride");
+  }
+
+  return rideRepo.updateRide(ride, {
+    status: "accepted",
+    driverid,
+    vehicleid
   });
 };
+
 
 export const startRide = async (rideid, driverid) => {
   const ride = await rideRepo.findRideById(rideid);

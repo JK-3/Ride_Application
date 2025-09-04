@@ -1,6 +1,6 @@
 import express from "express";
 import { sendResponse } from "../middlewares/sendResponse.js";
-import { verifyToken } from "../middlewares/authMiddlewares.js"; 
+import authenticateUser from "../middlewares/auth/authenticateUser.js";
 import {
   registerVehicle,
   updateVehicle,
@@ -20,7 +20,7 @@ import {
 const driverRouter = express.Router();
 
 
-driverRouter.use(verifyToken);
+driverRouter.use(authenticateUser);
 
 //vehicles
 driverRouter.post("/vehicles", registerVehicle, sendResponse);

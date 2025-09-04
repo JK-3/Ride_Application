@@ -14,7 +14,7 @@ export const viewRequestedRides = async (req, res, next) => {
 export const acceptRide = async (req, res, next) => {
   try {
     const { rideid, vehicleid } = req.body;
-    const driverid = req.user.id;
+    const driverid = req.userDetails.id;
     const ride = await rideService.acceptRide(rideid, driverid, vehicleid);
     req.responseData = { status: 200, data: ride };
     next();
@@ -27,7 +27,7 @@ export const acceptRide = async (req, res, next) => {
 export const startRide = async (req, res, next) => {
   try {
     const { rideid } = req.body;
-    const driverid = req.user.id;
+    const driverid = req.userDetails.id;
     const ride = await rideService.startRide(rideid, driverid);
     req.responseData = { status: 200, data: ride };
     next();
@@ -40,7 +40,7 @@ export const startRide = async (req, res, next) => {
 export const completeRide = async (req, res, next) => {
   try {
     const { rideid } = req.body;
-    const driverid = req.user.id;
+    const driverid = req.userDetails.id;
     const ride = await rideService.completeRide(rideid, driverid);
     req.responseData = { status: 200, data: ride };
     next();
@@ -53,7 +53,7 @@ export const completeRide = async (req, res, next) => {
 export const cancelRide = async (req, res, next) => {
   try {
     const { rideid } = req.body;
-    const driverid = req.user.id;
+    const driverid = req.userDetails.id;
     const ride = await rideService.cancelRide(rideid, driverid);
     req.responseData = { status: 200, data: ride };
     next();
@@ -65,7 +65,7 @@ export const cancelRide = async (req, res, next) => {
 
 export const viewMyRides = async (req, res, next) => {
   try {
-    const driverid = req.user.id;
+    const driverid = req.userDetails.id;
     const rides = await rideService.getDriverRides(driverid);
     req.responseData = { status: 200, data: rides };
     next();

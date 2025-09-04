@@ -18,3 +18,16 @@ export const findRidesByDriver = (driverid) => {
     order: [["createdAt", "DESC"]], 
   });
 };
+
+export const findActiveRideByDriver = (driverid) => {
+  return Rides.findOne({
+    where: { driverid, status: ["accepted", "start"] }
+  });
+};
+
+//  active ride for vehicle
+export const findActiveRideByVehicle = (vehicleid) => {
+  return Rides.findOne({
+    where: { vehicleid, status: ["accepted", "start"] }
+  });
+};
