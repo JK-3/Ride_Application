@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../../config/sequelize.js";
+import { sequelize } from "../../config/mysql.js";
 
 const Vehicle = sequelize.define("Vehicle", {
   vehicleid: {
