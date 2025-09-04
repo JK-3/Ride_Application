@@ -34,6 +34,18 @@ const User = sequelize.define('User', {
             len: { args: [10, 15], msg: "Phone number must be between 10 and 15 digits" }
         }
     },
+    role :{
+        type: DataTypes.ENUM("driver", "rider"),
+        allowNull : false,
+        validate : {
+            notEmpty : { msg : "Role is required" },
+            isIn: {
+                args: [["driver", "rider"]],
+                msg: "Role must be either 'driver' or 'rider'"
+            }
+        },
+        defaultValue : "rider"
+    },
     password: {
         type: DataTypes.STRING(255),
         allowNull: false,

@@ -1,4 +1,6 @@
 import app from "./app.js";
+import dotenv from 'dotenv';
+dotenv.config();
 import mongoConnect from "./config/mongo.js";
 import {checkMySqlConnection, syncSqlDatabase} from './config/mysql.js';
 
