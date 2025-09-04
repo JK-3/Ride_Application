@@ -6,19 +6,21 @@ export const sendResponse = (req, res) => {
         });
     }
 
-    const { status = 200, data = null, error = null } = req.responseData;
+    const { status = 200, data = null, error = null, message = null } = req.responseData;
 
     if (error) {
 
         console.error("API Error:", error);
         return res.status(status).json({
             success: false,
+            message,
             error
         });
     }
 
     return res.status(status).json({
         success: true,
+        message,
         data
     });
 };
