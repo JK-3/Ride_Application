@@ -57,6 +57,7 @@ const Rides = sequelize.define("Rides", {
   },
 }, {
   timestamps: true, 
+  tableName : 'rides'
 });
 
 export default Rides;

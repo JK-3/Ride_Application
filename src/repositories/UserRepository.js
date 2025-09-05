@@ -1,6 +1,5 @@
 import { ValidationError, UniqueConstraintError } from "sequelize";
-import User from "../models/mysql/User.js";
-
+import {User} from '../models/index.js';
 export default class UserRepository {
 
     async insertUser(userData) {
