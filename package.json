@@ -17,13 +17,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "mysql2": "^3.14.4",
-<<<<<<< HEAD
+    "nodemailer": "^7.0.6",
     "sequelize": "^6.37.7",
     "uuid": "^11.1.0"
-=======
-    "nodemailer": "^7.0.6",
-    "sequelize": "^6.37.7"
->>>>>>> 2db297455e149ecbaf8bf6b510662e84afd887e4
   },
   "type": "module"
 }

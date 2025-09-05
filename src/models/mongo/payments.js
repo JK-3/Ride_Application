@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema({
-  paymentid: { type: String, unique: true, required: true }, // UUID v4
-  rideid: { type: String, required: true },   // MySQL ride ID
+  paymentid: { type: String, unique: true, required: true },
+  rideid: { type: String, required: true },   
   fare: { type: Number, required: true },
-  method: { type: String, enum: ["cash", "card", "upi"], required: true },
+  method: { type: String, enum: ["cash", "card", "upi"], default:null },
   status: { type: String, enum: ["pending", "success", "failed"], default: "pending" },
   timestamp: { type: Date, default: Date.now }
 });

@@ -1,6 +1,5 @@
 import * as paymentService from "../services/paymentService.js";
 
-// ✅ Create Payment
 export const createPayment = async (req, res) => {
   try {
     const { rideid } = req.body;
@@ -15,10 +14,9 @@ export const createPayment = async (req, res) => {
   }
 };
 
-// ✅ Complete Payment
 export const completePayment = async (req, res) => {
   try {
-    const { id } = req.params; // paymentid
+    const { id } = req.params; 
     const { method } = req.body;
 
     if (!method) {
@@ -32,10 +30,9 @@ export const completePayment = async (req, res) => {
   }
 };
 
-// ✅ Get Payment Details
 export const getPayment = async (req, res) => {
   try {
-    const { id } = req.params; // paymentid
+    const { id } = req.params;
     const payment = await paymentService.getPaymentService(id);
 
     if (!payment) {

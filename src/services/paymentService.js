@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import * as rideRepo from "../repositories/rideRepository.js";
 import * as paymentRepo from "../repositories/paymentRepository.js";
 
-// ✅ Create Payment (only once per ride, must be completed)
+
 export const createPaymentService = async (rideid) => {
   const ride = await rideRepo.findRideById(rideid);
   if (!ride) throw new Error("Ride not found");
@@ -22,7 +22,7 @@ export const createPaymentService = async (rideid) => {
   });
 };
 
-// ✅ Complete Payment
+
 export const completePaymentService = async (paymentid, method) => {
   const payment = await paymentRepo.findPaymentById(paymentid);
   if (!payment) throw new Error("Payment not found");
@@ -43,7 +43,7 @@ export const completePaymentService = async (paymentid, method) => {
   }
 };
 
-// ✅ Get Payment Details
+
 export const getPaymentService = async (paymentid) => {
   const payment = await paymentRepo.findPaymentById(paymentid);
   if (!payment) return null;
