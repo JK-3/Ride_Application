@@ -13,6 +13,7 @@ export default class UserService {
         if(user) {
             delete user.password;
 
+            // send Mail -------------------------------------------------
             let mailObj = {
                 to : user.email ? [user.email] : [],
                 subject : "Welcome to Ride App !",
@@ -24,6 +25,8 @@ export default class UserService {
             }
 
             await HF.sendMail(mailObj);
+            // -----------------------------------------------------------
+
             return {data : user, message : 'User registration sucessfull'};
         }
         return {data : null, message : "Registration unsucessfull"};
@@ -66,6 +69,7 @@ export default class UserService {
     }
 
     async updateUserProfile(userId, updateData){
+        delete updateData?.password;
         const updatedUser = await userRepository.updateUser(userId, updateData);
         if(updatedUser) {
             delete updatedUser.password;
