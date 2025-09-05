@@ -28,7 +28,7 @@ const createDatabaseIfNotExists = async () => {
 const sequelize = new Sequelize(dbName, dbUser, dbPass, {
   host: dbHost,
   dialect: "mysql",
-  logging: console.log, // set to false to disable SQL logging
+  logging: false, // set to false to disable SQL logging
 });
 
 const checkMySqlConnection = async () => {

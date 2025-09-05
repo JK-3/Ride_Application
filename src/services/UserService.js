@@ -1,18 +1,35 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserRepository from '../repositories/UserRepository.js';
+import HelperFunction from "../utils/HelperFunction.js";
 const userRepository = new UserRepository();
+const HF = new HelperFunction();
 
 export default class UserService {
     async registerUser(userData){
 
         userData.password = await bcrypt.hash(userData.password, 10);
-        const user = await userRepository.insertUser(userData)
-        if(user) {
-            delete user.password;
-            return {data : user, message : 'User registration sucessfull'};
+        const response = await userRepository.insertUser(userData)
+        if(response?.data) {
+            delete response.data.password;
+
+            // send Mail -------------------------------------------------
+            let mailObj = {
+                to : response.data.email ? [response.data.email] : [],
+                subject : "Welcome to Ride App !",
+                htmlTemplate : 'welcome.html',
+                templateData : {
+                    username : response.data.username,
+                    email : response.data.email
+                }
+            }
+
+            await HF.sendMail(mailObj);
+            // -----------------------------------------------------------
+
+            return {data : response.data, message : 'User registration sucessfull'};
         }
-        return {data : null, message : "Registration unsucessfull"};
+        return {data : null, message : response.message};
     }
 
     async loginUser({email, password}){
@@ -52,6 +69,7 @@ export default class UserService {
     }
 
     async updateUserProfile(userId, updateData){
+        delete updateData?.password;
         const updatedUser = await userRepository.updateUser(userId, updateData);
         if(updatedUser) {
             delete updatedUser.password;

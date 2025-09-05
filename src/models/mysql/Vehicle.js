@@ -10,6 +10,12 @@ const Vehicle = sequelize.define("Vehicle", {
   driverid: {
     type: DataTypes.UUID,
     allowNull: false,
+    references: {
+      model : 'users',
+      key : 'id'
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   },
   brand: {
     type: DataTypes.STRING(50),   

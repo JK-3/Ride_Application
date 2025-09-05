@@ -152,4 +152,35 @@ export default class UserController{
             next();
         }
     }
+
+    async logoutUser(req, res, next){
+        try {
+
+            // Clear cookies
+            res.clearCookie("auth_token", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict"
+            });
+
+            res.clearCookie("user_info", {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax"
+            });
+
+            req.responseData = {
+                status: 200,
+                message: "Logout successful"
+            };
+            next();
+            
+        } catch (error) {
+            req.responseData = {
+                status : 500,
+                error : error.message
+            }
+            next();
+        }
+    }
 }

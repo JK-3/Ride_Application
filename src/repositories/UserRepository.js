@@ -1,6 +1,5 @@
 import { ValidationError, UniqueConstraintError } from "sequelize";
-import User from "../models/mysql/User.js";
-
+import {User} from '../models/index.js';
 export default class UserRepository {
 
     async insertUser(userData) {
@@ -10,14 +9,16 @@ export default class UserRepository {
     
             console.log(newUser.toJSON());
         
-            return newUser.toJSON();
+            return {data : newUser.toJSON()};
         } catch (error) {
 
             if (error instanceof UniqueConstraintError) {
-                throw new Error(error.errors[0].message);
+                // throw new Error(error.errors[0].message);
+                return {message : error.errors[0].message};
             }
             if (error instanceof ValidationError) {
-                throw new Error(error.errors.map(e => e.message).join(", "));
+                // throw new Error(error.errors.map(e => e.message).join(", "));
+                return {message : error.errors.map(e => e.message).join(", ")};
             }
             throw error;
         }
