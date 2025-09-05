@@ -1,4 +1,4 @@
-import Payment from "../models/mongo/payments.js";
+import Payment from "../models/mongo/Payments.js";
 
 export const createPayment = async (paymentData) => {
   const payment = new Payment(paymentData);
