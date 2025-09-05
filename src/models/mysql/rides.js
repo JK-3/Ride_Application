@@ -10,10 +10,18 @@ const Rides = sequelize.define("Rides", {
   riderid: {
     type: DataTypes.UUID,
     allowNull: false,
+    references: {
+      model : 'users',
+      key : id
+    }
   },
   driverid: {
     type: DataTypes.UUID,
     allowNull: true,
+    references: {
+      model : 'users',
+      key : id
+    } 
   },
   pickup: {
     type: DataTypes.STRING,
@@ -45,6 +53,10 @@ const Rides = sequelize.define("Rides", {
   vehicleid: {
   type: DataTypes.UUID,
   allowNull: true,
+  references: {
+    model : 'vehicles',
+    key : 'vehicleid'
+  }
   },
   
   paymentid: {
