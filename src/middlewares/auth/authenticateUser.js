@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default authenticateUser = (req, res, next) => {
+const authenticateUser = (req, res, next) => {
     try {
         const token = req.cookies.auth_token; // ✅ read from cookie
         if (!token) {
@@ -15,3 +15,4 @@ export default authenticateUser = (req, res, next) => {
         return res.status(401).json({ error: "Invalid or expired token" });
     }
 };
+export default authenticateUser;

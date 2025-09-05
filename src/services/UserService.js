@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserRepository from '../repositories/UserRepository.js';
+import HelperFunction from "../utils/HelperFunction.js";
 const userRepository = new UserRepository();
+const HF = new HelperFunction();
 
 export default class UserService {
     async registerUser(userData){
@@ -10,6 +12,18 @@ export default class UserService {
         const user = await userRepository.insertUser(userData)
         if(user) {
             delete user.password;
+
+            let mailObj = {
+                to : user.email ? [user.email] : [],
+                subject : "Welcome to Ride App !",
+                htmlTemplate : 'welcome.html',
+                templateData : {
+                    username : user.username,
+                    email : user.email
+                }
+            }
+
+            await HF.sendMail(mailObj);
             return {data : user, message : 'User registration sucessfull'};
         }
         return {data : null, message : "Registration unsucessfull"};
