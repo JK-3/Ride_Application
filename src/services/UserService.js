@@ -9,27 +9,27 @@ export default class UserService {
     async registerUser(userData){
 
         userData.password = await bcrypt.hash(userData.password, 10);
-        const user = await userRepository.insertUser(userData)
-        if(user) {
-            delete user.password;
+        const response = await userRepository.insertUser(userData)
+        if(response?.data) {
+            delete response.data.password;
 
             // send Mail -------------------------------------------------
             let mailObj = {
-                to : user.email ? [user.email] : [],
+                to : response.data.email ? [response.data.email] : [],
                 subject : "Welcome to Ride App !",
                 htmlTemplate : 'welcome.html',
                 templateData : {
-                    username : user.username,
-                    email : user.email
+                    username : response.data.username,
+                    email : response.data.email
                 }
             }
 
             await HF.sendMail(mailObj);
             // -----------------------------------------------------------
 
-            return {data : user, message : 'User registration sucessfull'};
+            return {data : response.data, message : 'User registration sucessfull'};
         }
-        return {data : null, message : "Registration unsucessfull"};
+        return {data : null, message : response.message};
     }
 
     async loginUser({email, password}){
