@@ -9,7 +9,7 @@ const userRouter = express.Router();
 
 userRouter.post('/register', userController.createUser, sendResponse);
 userRouter.post('/login', userController.loginUser, sendResponse);
-userRouter.post('/getme', authenticateUser, userController.getUserProfile, sendResponse);
+userRouter.get('/getme', authenticateUser, userController.getUserProfile, sendResponse);
 userRouter.post('/update', authenticateUser, userController.updateUserProfile, sendResponse);
 userRouter.post('/change-pass', authenticateUser, userController.changeUserPassword, sendResponse);
 userRouter.post('/logout', authenticateUser, userController.logoutUser, sendResponse);
