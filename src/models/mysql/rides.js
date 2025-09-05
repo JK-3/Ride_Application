@@ -12,7 +12,7 @@ const Rides = sequelize.define("Rides", {
     allowNull: false,
     references: {
       model : 'users',
-      key : id
+      key : 'id'
     }
   },
   driverid: {
@@ -20,7 +20,7 @@ const Rides = sequelize.define("Rides", {
     allowNull: true,
     references: {
       model : 'users',
-      key : id
+      key : 'id'
     } 
   },
   pickup: {
