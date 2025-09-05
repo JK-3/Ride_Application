@@ -1,5 +1,5 @@
-import Payment from "../models/mongo/Payment.js";
-import mysqlPool from "../config/mysql.js";
+import Payment from "../models/mongo/payments.js";
+import { sequelize } from "../config/mysql.js";
 
 export const createPayment = async (data) => {
   const payment = new Payment(data);
@@ -10,9 +10,18 @@ export const getPaymentWithDetails = async (paymentId) => {
   const payment = await Payment.findOne({ paymentid: paymentId });
   if (!payment) throw new Error("Payment not found");
 
-  const [ride] = await mysqlPool.query("SELECT * FROM rides WHERE id = ?", [payment.rideid]);
-  const [rider] = await mysqlPool.query("SELECT * FROM riders WHERE id = ?", [payment.riderid]);
-  const [driver] = await mysqlPool.query("SELECT * FROM drivers WHERE id = ?", [payment.driverid]);
+  // Use Sequelize to run raw SQL queries
+  const [ride] = await sequelize.query("SELECT * FROM rides WHERE id = ?", {
+    replacements: [payment.rideid],
+  });
+
+  const [rider] = await sequelize.query("SELECT * FROM riders WHERE id = ?", {
+    replacements: [payment.riderid],
+  });
+
+  const [driver] = await sequelize.query("SELECT * FROM drivers WHERE id = ?", {
+    replacements: [payment.driverid],
+  });
 
   return {
     paymentid: payment.paymentid,
@@ -22,6 +31,6 @@ export const getPaymentWithDetails = async (paymentId) => {
     timestamp: payment.timestamp,
     ride: ride[0] || null,
     rider: rider[0] || null,
-    driver: driver[0] || null
+    driver: driver[0] || null,
   };
 };
