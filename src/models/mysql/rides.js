@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../../config/mysql";
+import { sequelize } from "../../config/mysql.js";
 
 const Rides = sequelize.define("Rides", {
   rideid: {
@@ -42,6 +42,10 @@ const Rides = sequelize.define("Rides", {
     allowNull: true, 
   },
 
+  vehicleid: {
+  type: DataTypes.UUID,
+  allowNull: true,
+  },
   
   paymentid: {
     type: DataTypes.UUID,

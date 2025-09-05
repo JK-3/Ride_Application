@@ -6,3 +6,5 @@ const indexRouter = Router();
 indexRouter.use('/users', userRouter);
 
 export default indexRouter;
+
+
