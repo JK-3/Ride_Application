@@ -1,33 +1,53 @@
 import { v4 as uuidv4 } from "uuid";
-import { createPayment, getPaymentWithDetails } from "../repositories/paymentRepository.js";
-import { sequelize } from "../config/mysql.js";
+import * as rideRepo from "../repositories/rideRepository.js";
+import * as paymentRepo from "../repositories/paymentRepository.js";
 
-export const createPaymentService = async (data) => {
-  // Validate ride
-  const [ride] = await sequelize.query("SELECT * FROM rides WHERE id = ?", {
-    replacements: [data.rideid],
-  });
-  if (ride.length === 0) throw new Error("Ride not found");
+// ✅ Create Payment (only once per ride, must be completed)
+export const createPaymentService = async (rideid) => {
+  const ride = await rideRepo.findRideById(rideid);
+  if (!ride) throw new Error("Ride not found");
 
-  // Validate rider
-  const [rider] = await sequelize.query("SELECT * FROM riders WHERE id = ?", {
-    replacements: [data.riderid],
-  });
-  if (rider.length === 0) throw new Error("Rider not found");
+  if (ride.status !== "completed") {
+    throw new Error("Payment not allowed until ride is completed");
+  }
 
-  // Validate driver
-  const [driver] = await sequelize.query("SELECT * FROM drivers WHERE id = ?", {
-    replacements: [data.driverid],
-  });
-  if (driver.length === 0) throw new Error("Driver not found");
+  const existing = await paymentRepo.findPaymentByRideId(rideid);
+  if (existing) throw new Error("Payment already exists for this ride");
 
-  // Create payment in Mongo
-  return await createPayment({
+  return await paymentRepo.createPayment({
     paymentid: uuidv4(),
-    ...data,
+    rideid: rideid,
+    fare: ride.fare,
+    status: "pending",
   });
 };
 
-export const getPaymentService = async (paymentId) => {
-  return await getPaymentWithDetails(paymentId);
+// ✅ Complete Payment
+export const completePaymentService = async (paymentid, method) => {
+  const payment = await paymentRepo.findPaymentById(paymentid);
+  if (!payment) throw new Error("Payment not found");
+
+  if (payment.status === "completed") {
+    return { message: "Payment already completed", payment };
+  }
+
+  try {
+    const updated = await paymentRepo.updatePayment(paymentid, {
+      method,
+      status: "completed",
+    });
+    return { message: "Payment completed successfully", payment: updated };
+  } catch (err) {
+    await paymentRepo.updatePayment(paymentid, { status: "failed" });
+    throw new Error("Payment failed to complete");
+  }
+};
+
+// ✅ Get Payment Details
+export const getPaymentService = async (paymentid) => {
+  const payment = await paymentRepo.findPaymentById(paymentid);
+  if (!payment) return null;
+
+  const ride = await rideRepo.findRideById(payment.rideid);
+  return await paymentRepo.getPaymentWithDetails(paymentid, ride);
 };

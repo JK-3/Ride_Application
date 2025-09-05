@@ -1,36 +1,38 @@
 import Payment from "../models/mongo/payments.js";
-import { sequelize } from "../config/mysql.js";
+// import * as rideRepo from "./rideRepository.js";
 
-export const createPayment = async (data) => {
-  const payment = new Payment(data);
+// Create new payment
+export const createPayment = async (paymentData) => {
+  const payment = new Payment(paymentData);
   return await payment.save();
 };
 
-export const getPaymentWithDetails = async (paymentId) => {
-  const payment = await Payment.findOne({ paymentid: paymentId });
-  if (!payment) throw new Error("Payment not found");
+// Find payment by paymentid (UUID)
+export const findPaymentById = async (paymentid) => {
+  return await Payment.findOne({ paymentid });
+};
 
-  // Use Sequelize to run raw SQL queries
-  const [ride] = await sequelize.query("SELECT * FROM rides WHERE id = ?", {
-    replacements: [payment.rideid],
-  });
+// Find payment by rideid (to enforce one payment per ride)
+export const findPaymentByRideId = async (rideid) => {
+  return await Payment.findOne({ rideid });
+};
 
-  const [rider] = await sequelize.query("SELECT * FROM riders WHERE id = ?", {
-    replacements: [payment.riderid],
-  });
+// Update payment by paymentid
+export const updatePayment = async (paymentid, updates) => {
+  return await Payment.findOneAndUpdate(
+    { paymentid },
+    { $set: updates },
+    { new: true } // return updated document
+  );
+};
 
-  const [driver] = await sequelize.query("SELECT * FROM drivers WHERE id = ?", {
-    replacements: [payment.driverid],
-  });
+// Get payment with ride details
+export const getPaymentWithDetails = async (paymentid, ride) => {
+  const payment = await Payment.findOne({ paymentid }).lean();
+  if (!payment) return null;
 
   return {
-    paymentid: payment.paymentid,
-    fare: payment.fare,
-    method: payment.method,
-    status: payment.status,
-    timestamp: payment.timestamp,
-    ride: ride[0] || null,
-    rider: rider[0] || null,
-    driver: driver[0] || null,
+    ...payment,
+    ride: ride ? ride.toJSON?.() || ride : null,
   };
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import { sendResponse } from "../middlewares/sendResponse.js";
 import authenticateUser from "../middlewares/auth/authenticateUser.js";
+
 import {
   registerVehicle,
   updateVehicle,

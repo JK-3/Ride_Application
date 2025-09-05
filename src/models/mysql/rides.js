@@ -23,7 +23,7 @@ const Rides = sequelize.define("Rides", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  fail: {
+  fare: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },

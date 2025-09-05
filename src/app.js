@@ -10,6 +10,4 @@ app.use(cookieParser());
 
 app.use('/api', indexRouter);
 
-app.use("/payments", paymentRoutes);
-
 export default app;

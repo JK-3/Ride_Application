@@ -13,6 +13,7 @@ userRouter.post('/getme', authenticateUser, userController.getUserProfile, sendR
 userRouter.post('/update', authenticateUser, userController.updateUserProfile, sendResponse);
 userRouter.post('/change-pass', authenticateUser, userController.changeUserPassword, sendResponse);
 
-userRouter.use("/driver", driverRouter);
+
+userRouter.use("/driver", driverRouter)
 
 export default userRouter;

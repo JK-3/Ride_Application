@@ -1,9 +1,15 @@
 import express from "express";
-import { createPayment, getPayment } from "../controllers/paymentController.js";
+import { createPayment, completePayment, getPayment } from "../controllers/paymentController.js";
 
-const router = express.Router();
+const paymentRouter = express.Router();
 
-router.post("/", createPayment);
-router.get("/:id", getPayment);
+// POST /api/users/payments → create payment
+paymentRouter.post("/payments", createPayment);
 
-export default router;
+// PUT /api/users/payments/:id/complete → complete payment
+paymentRouter.put("/payments/:id/complete", completePayment);
+
+// GET /api/users/payments/:id → get payment details
+paymentRouter.get("/payments/:id", getPayment);
+
+export default paymentRouter;
