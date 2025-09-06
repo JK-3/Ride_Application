@@ -1,10 +1,14 @@
 import { Sequelize } from "sequelize";
 import mysql from "mysql2/promise";
 
-const dbName = "ride_app_demo_node";
-const dbUser = "root";
-const dbPass = "admin";
-const dbHost = "localhost";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const dbName = process.env.DB_NAME;
+const dbUser = process.env.DB_USER;
+const dbPass = process.env.DB_PASS;
+const dbHost = process.env.DB_HOST;
 
 
 const createDatabaseIfNotExists = async () => {
@@ -16,7 +20,7 @@ const createDatabaseIfNotExists = async () => {
     });
 
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
-    console.log(`✅ Database "${dbName}" is ready`);
+    console.log(`Database "${dbName}" is ready`);
     await connection.end();
   } catch (error) {
     console.error("Error creating database:", error);
