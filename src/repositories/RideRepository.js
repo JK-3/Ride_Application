@@ -1,5 +1,5 @@
-// repositories/RideRepository.js
-import Rides from "../models/mysql/rides.js";
+
+import Rides from "../models/mysql/Rides";
 import { Op } from "sequelize";
 
 class RideRepository {

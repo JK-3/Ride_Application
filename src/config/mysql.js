@@ -6,7 +6,7 @@ const dbUser = "root";
 const dbPass = "760097";
 const dbHost = "localhost";
 
-// ✅ Step 1: Create DB if it doesn't exist
+
 const createDatabaseIfNotExists = async () => {
   try {
     const connection = await mysql.createConnection({
@@ -19,25 +19,24 @@ const createDatabaseIfNotExists = async () => {
     console.log(`✅ Database "${dbName}" is ready`);
     await connection.end();
   } catch (error) {
-    console.error("❌ Error creating database:", error);
+    console.error("Error creating database:", error);
     throw error;
   }
 };
 
-// ✅ Step 2: Initialize Sequelize (after DB is created)
 const sequelize = new Sequelize(dbName, dbUser, dbPass, {
   host: dbHost,
   dialect: "mysql",
-  logging: false, // set to false to disable SQL logging
+  logging: false,
 });
 
 const checkMySqlConnection = async () => {
   try {
-    await createDatabaseIfNotExists(); // ✅ Ensure DB exists first
+    await createDatabaseIfNotExists(); 
     await sequelize.authenticate();
-    console.log("✅ MySQL Connected using Sequelize");
+    console.log("MySQL Connected using Sequelize");
   } catch (error) {
-    console.error("❌ MySQL Connection Error:", error.message);
+    console.error("MySQL Connection Error:", error.message);
     throw error;
   }
 };
@@ -45,9 +44,9 @@ const checkMySqlConnection = async () => {
 const syncSqlDatabase = async () => {
   try {
     await sequelize.sync({ force: false });
-    console.log("✅ MySQL database synchronized successfully.");
+    console.log("MySQL database synchronized successfully.");
   } catch (error) {
-    console.error("❌ Error syncing database:", error.message);
+    console.error(" Error syncing database:", error.message);
     throw error;
   }
 };

@@ -13,12 +13,10 @@ export default class UserRepository {
         } catch (error) {
 
             if (error instanceof UniqueConstraintError) {
-                // throw new Error(error.errors[0].message);
-                return {message : error.errors[0].message};
+                 return {message : error.errors[0].message};
             }
             if (error instanceof ValidationError) {
-                // throw new Error(error.errors.map(e => e.message).join(", "));
-                return {message : error.errors.map(e => e.message).join(", ")};
+                 return {message : error.errors.map(e => e.message).join(", ")};
             }
             throw error;
         }

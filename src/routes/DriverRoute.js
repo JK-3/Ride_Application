@@ -23,14 +23,12 @@ const driverRouter = express.Router();
 
 driverRouter.use(authenticateUser);
 
-//vehicles
+ 
 driverRouter.post("/vehicles", registerVehicle, sendResponse);
 driverRouter.get("/vehicles", getMyVehicles, sendResponse);
 driverRouter.put("/vehicles/:id", updateVehicle, sendResponse);
 driverRouter.delete("/vehicles/:id", deleteVehicle, sendResponse);
-
-
-//rides
+ 
 driverRouter.get("/rides/requested", viewRequestedRides, sendResponse);
 driverRouter.post("/rides/accept", acceptRide, sendResponse);
 driverRouter.post("/rides/start", startRide, sendResponse);
