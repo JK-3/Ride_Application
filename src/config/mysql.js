@@ -3,7 +3,7 @@ import mysql from "mysql2/promise";
 
 const dbName = "ride_app_demo_node";
 const dbUser = "root";
-const dbPass = "admin";
+const dbPass = "760097";
 const dbHost = "localhost";
 
 // ✅ Step 1: Create DB if it doesn't exist

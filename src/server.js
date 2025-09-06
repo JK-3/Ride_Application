@@ -5,6 +5,7 @@ import mongoConnect from "./config/mongo.js";
 import {checkMySqlConnection, syncSqlDatabase} from './config/mysql.js';
 
 const PORT = process.env.PORT;
+console.log(PORT)
 
 const startServer = async () => {
     try {
