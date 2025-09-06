@@ -86,7 +86,9 @@ export default class RideController {
  
   async getActiveRide(req, res) {
     try {
-      const riderId = req.user.id;
+      const riderId = req.userDetails?.id; 
+      console.log(riderId)
+
       const { data } = await rideService.getActiveRide(riderId);
 
       return res.status(200).json({ success: true, data });

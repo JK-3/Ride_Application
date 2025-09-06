@@ -3,8 +3,10 @@ const rideRepository = new RideRepository();
 
 export default class RideService {
   async requestRide(rideData) {
+    
     const ride = await rideRepository.insertRide({
         ...rideData,
+        
         status: "requested"
     });
 
