@@ -14,16 +14,24 @@ export const createPaymentService = async (rideid) => {
   const existing = await paymentRepo.findPaymentByRideId(rideid);
   if (existing) throw new Error("Payment already exists for this ride");
 
-  return await paymentRepo.createPayment({
-    paymentid: uuidv4(),
+  const paymentid = uuidv4();
+  const payment = await paymentRepo.createPayment({
+    paymentid,
     rideid: rideid,
     fare: ride.fare,
     status: "pending",
   });
+
+  await rideRepo.updateRide(ride, { paymentid });
+
+  return payment;
+
 };
 
 
 export const completePaymentService = async (paymentid, method) => {
+  if (!method) throw new Error("Payment method is required");
+
   const payment = await paymentRepo.findPaymentById(paymentid);
   if (!payment) throw new Error("Payment not found");
 
