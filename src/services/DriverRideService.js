@@ -1,46 +1,51 @@
-import * as rideRepo from "../repositories/RideRepository.js";
+import RideRepository from "../repositories/RideRepository.js";
 import * as vehicleRepo from "../repositories/VehicleRepository.js";
 
+const rideRepo = new RideRepository();
 
 export const getRequestedRides = async () => {
   return rideRepo.findRequestedRides();
 };
 
-
-
 export const acceptRide = async (rideid, driverid, vehicleid) => {
+  if (!rideid || !driverid || !vehicleid) {
+    throw new Error("rideid, driverid and vehicleid are required");
+  }
+
   const ride = await rideRepo.findRideById(rideid);
 
   if (!ride || ride.status !== "requested") {
     throw new Error("Ride not available");
   }
-  
+
   const vehicle = await vehicleRepo.getVehicleById(vehicleid, driverid);
   if (!vehicle) {
     throw new Error("Invalid vehicle for this driver");
   }
 
-  //  if driver already has an active ride
+
   const activeDriverRide = await rideRepo.findActiveRideByDriver(driverid);
   if (activeDriverRide) {
     throw new Error("Driver already has an active ride");
   }
 
-  // if vehicle already has an active ride
+
   const activeVehicleRide = await rideRepo.findActiveRideByVehicle(vehicleid);
   if (activeVehicleRide) {
     throw new Error("Vehicle is already assigned to another ride");
   }
 
+  
   return rideRepo.updateRide(ride, {
     status: "accepted",
     driverid,
-    vehicleid
+    vehicleid,
   });
 };
 
-
 export const startRide = async (rideid, driverid) => {
+  if (!rideid || !driverid) throw new Error("rideid and driverid required");
+
   const ride = await rideRepo.findRideById(rideid);
   if (!ride || ride.driverid !== driverid || ride.status !== "accepted") {
     throw new Error("Ride cannot be started");
@@ -49,6 +54,8 @@ export const startRide = async (rideid, driverid) => {
 };
 
 export const completeRide = async (rideid, driverid) => {
+  if (!rideid || !driverid) throw new Error("rideid and driverid required");
+
   const ride = await rideRepo.findRideById(rideid);
   if (!ride || ride.driverid !== driverid || ride.status !== "start") {
     throw new Error("Ride cannot be completed");
@@ -57,6 +64,8 @@ export const completeRide = async (rideid, driverid) => {
 };
 
 export const cancelRide = async (rideid, driverid) => {
+  if (!rideid || !driverid) throw new Error("rideid and driverid required");
+
   const ride = await rideRepo.findRideById(rideid);
 
   if (!ride || ride.driverid !== driverid) {
@@ -71,5 +80,6 @@ export const cancelRide = async (rideid, driverid) => {
 };
 
 export const getDriverRides = async (driverid) => {
+  if (!driverid) throw new Error("driverid required");
   return rideRepo.findRidesByDriver(driverid);
 };

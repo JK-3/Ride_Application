@@ -1,5 +1,4 @@
-
-import Rides from "../models/mysql/Rides";
+import { Rides} from "../models/index.js";
 import { Op } from "sequelize";
 
 class RideRepository {
@@ -14,8 +13,16 @@ async insertRide(rideData) {
   }
 
    
-  async updateRide(rideid, updates) {
-    const ride = await this.findRideById(rideid);
+   async updateRide(rideOrId, updates) {
+    if (!rideOrId) return null;
+
+    
+    if (typeof rideOrId === "object" && typeof rideOrId.update === "function") {
+      return rideOrId.update(updates);
+    }
+
+   
+    const ride = await this.findRideById(rideOrId);
     if (!ride) return null;
     return ride.update(updates);
   }
@@ -80,6 +87,13 @@ async insertRide(rideData) {
           [Op.in]: ["accepted", "start"],
         },
       },
+    });
+  }
+
+   async findRequestedRides() {
+    return Rides.findAll({
+      where: { status: "requested" },
+      order: [["createdAt", "DESC"]],
     });
   }
 }

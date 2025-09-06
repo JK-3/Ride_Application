@@ -3,7 +3,7 @@ import mysql from "mysql2/promise";
 
 const dbName = "ride_app_demo_node";
 const dbUser = "root";
-const dbPass = "760097";
+const dbPass = "password";
 const dbHost = "localhost";
 
 
