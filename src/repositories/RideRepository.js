@@ -1,33 +1,101 @@
-import Rides from "../models/mysql/rides.js";
+import { Rides} from "../models/index.js";
+import { Op } from "sequelize";
 
-export const findRequestedRides = () => {
-  return Rides.findAll({ where: { status: "requested" } });
-};
+class RideRepository {
+  
 
-export const findRideById = (rideid) => {
-  return Rides.findByPk(rideid);
-};
+async insertRide(rideData) {
+    console.log(rideData)
+    return await Rides.create(rideData);
+}
+  async findRideById(rideid) {
+    return Rides.findByPk(rideid);
+  }
 
-export const updateRide = (ride, updates) => {
-  return ride.update(updates);
-};
+   
+   async updateRide(rideOrId, updates) {
+    if (!rideOrId) return null;
 
-export const findRidesByDriver = (driverid) => {
-  return Rides.findAll({
-    where: { driverid },
-    order: [["createdAt", "DESC"]], 
-  });
-};
+    
+    if (typeof rideOrId === "object" && typeof rideOrId.update === "function") {
+      return rideOrId.update(updates);
+    }
 
-export const findActiveRideByDriver = (driverid) => {
-  return Rides.findOne({
-    where: { driverid, status: ["accepted", "start"] }
-  });
-};
+   
+    const ride = await this.findRideById(rideOrId);
+    if (!ride) return null;
+    return ride.update(updates);
+  }
+ 
+  async findRidesByRider(riderid) {
+    return Rides.findAll({
+      where: { riderid },
+      order: [["createdAt", "DESC"]],
+    });
+  }
 
-//  active ride for vehicle
-export const findActiveRideByVehicle = (vehicleid) => {
-  return Rides.findOne({
-    where: { vehicleid, status: ["accepted", "start"] }
-  });
-};
+  
+  async findRidesByStatus(riderid, statuses) {
+    return Rides.findAll({
+      where: {
+        riderid,
+        status: {
+          [Op.in]: statuses,
+        },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+  }
+ 
+  async findActiveRideByRider(riderid) {
+    return Rides.findOne({
+      where: {
+        riderid,
+        status: {
+          [Op.in]: ["accepted", "start"],
+        },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+  }
+ 
+  async findRidesByDriver(driverid) {
+    return Rides.findAll({
+      where: { driverid },
+      order: [["createdAt", "DESC"]],
+    });
+  }
+
+ 
+  async findActiveRideByDriver(driverid) {
+    return Rides.findOne({
+      where: {
+        driverid,
+        status: {
+          [Op.in]: ["accepted", "start"],
+        },
+      },
+    });
+  }
+
+ 
+  async findActiveRideByVehicle(vehicleid) {
+    return Rides.findOne({
+      where: {
+        vehicleid,
+        status: {
+          [Op.in]: ["accepted", "start"],
+        },
+      },
+    });
+  }
+
+   async findRequestedRides() {
+    return Rides.findAll({
+      where: { status: "requested" },
+      order: [["createdAt", "DESC"]],
+    });
+  }
+}
+
+export default RideRepository;

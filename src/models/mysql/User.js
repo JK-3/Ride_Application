@@ -16,7 +16,7 @@ const User = sequelize.define('User', {
         }
     },
     email: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(80),
         allowNull: false,
         unique: { msg: "Email already exists" },
         validate: {
@@ -57,9 +57,9 @@ const User = sequelize.define('User', {
     image: {
         type: DataTypes.STRING(255),
         allowNull: true,
-        validate: {
-            isUrl: { msg: "Image must be a valid URL" }
-        }
+        // validate: {
+        //     isUrl: { msg: "Image must be a valid URL" }
+        // }
     },
     created_at: {
         type: DataTypes.DATE,

@@ -4,7 +4,7 @@ const authenticateUser = (req, res, next) => {
     try {
         const token = req.cookies.auth_token; // ✅ read from cookie
         if (!token) {
-            return res.status(401).json({ error: "Unauthorized" });
+            return res.status(401).json({ error: "Please Login First.. " });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET || "");

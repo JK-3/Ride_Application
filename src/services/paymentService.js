@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import * as rideRepo from "../repositories/rideRepository.js";
+import RideRepository from "../repositories/RideRepository.js";
 import * as paymentRepo from "../repositories/paymentRepository.js";
-
+const rideRepo=new RideRepository();
 
 export const createPaymentService = async (rideid) => {
   const ride = await rideRepo.findRideById(rideid);
