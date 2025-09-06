@@ -6,8 +6,8 @@ const ratingRepository = new RatingRepository();
 const rideRepository = new RideRepository();
 
 export default class RatingService {
-    async createRating({ rideid, stars, comment }) {
-        const ride = await rideRepository.findById(rideid);
+    async createRating({ rideid, score, comment }) {
+        const ride = await rideRepository.findRideById(rideid);
         if (!ride) throw new Error("Ride not found");
 
         if (ride.status !== "completed") {
@@ -22,7 +22,7 @@ export default class RatingService {
         const rating = await ratingRepository.insertRating({
             ratingid,
             rideid,
-            stars,
+            score,
             comment,
         });
 
