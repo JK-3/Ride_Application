@@ -57,9 +57,9 @@ const User = sequelize.define('User', {
     image: {
         type: DataTypes.STRING(255),
         allowNull: true,
-        validate: {
-            isUrl: { msg: "Image must be a valid URL" }
-        }
+        // validate: {
+        //     isUrl: { msg: "Image must be a valid URL" }
+        // }
     },
     created_at: {
         type: DataTypes.DATE,

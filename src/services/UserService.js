@@ -70,6 +70,7 @@ export default class UserService {
 
     async updateUserProfile(userId, updateData){
         delete updateData?.password;
+        delete updateData?.role;
         const updatedUser = await userRepository.updateUser(userId, updateData);
         if(updatedUser) {
             delete updatedUser.password;
