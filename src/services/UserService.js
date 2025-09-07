@@ -20,7 +20,8 @@ export default class UserService {
                 htmlTemplate : 'welcome.html',
                 templateData : {
                     username : response.data.username,
-                    email : response.data.email
+                    email : response.data.email,
+                    appname : "Ride App"
                 }
             }
 

@@ -44,7 +44,7 @@ const checkMySqlConnection = async () => {
 
 const syncSqlDatabase = async () => {
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ alter: true }); // auto add / alter the table as same as schema changes in the code
     console.log("✅ MySQL database synchronized successfully.");
   } catch (error) {
     console.error("❌ Error syncing database:", error.message);
