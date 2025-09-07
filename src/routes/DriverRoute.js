@@ -16,7 +16,7 @@ const vehicleController = new VehicleController();
 driverRouter.use(authenticateUser,driverAuth);
 
 
-driverRouter.post("/vehicles",authenticateUser,driverAuth, vehicleController.registerVehicle, sendResponse);
+driverRouter.post("/vehicles",vehicleController.registerVehicle, sendResponse);
 driverRouter.get("/vehicles", vehicleController.getMyVehicles, sendResponse);
 driverRouter.put("/vehicles/:id", vehicleController.updateVehicle, sendResponse);
 driverRouter.delete("/vehicles/:id", vehicleController.deleteVehicle, sendResponse);
