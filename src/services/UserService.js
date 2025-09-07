@@ -84,15 +84,83 @@ export default class UserService {
         const user = await userRepository.findById(userId);
 
         if(!user){
-            throw new Error('User not found');
+            return {message : "User not found.", status : 400};
         }
 
         const matchPass = await bcrypt.compare(oldPassword, user.password);
-        if(!matchPass){throw new Error('Old password incorrect')};
+        if(!matchPass){return {message : "Old password incorrect", status : 400};};
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await userRepository.updateUser(userId, {password : hashedPassword});
 
         return {message : "Password changed successfully"};
+    }
+
+    async userForgotPassword(email){
+        const user = await userRepository.findByEmail(email);
+        
+        if(!user){
+            return {message : "User not found.", status : 400}
+        }
+
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Set expiry time (10 minutes from now)
+        const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+        // Save the otp and expiry of this otp
+        await userRepository.updateUser(user.id, {resetOtp : otp, resetOtpExpiry : expiry});
+
+
+        // send Mail -------------------------------------------------
+        let mailObj = {
+            to : user.email ? [user.email] : [],
+            subject : "Your Ride App password reset code",
+            htmlTemplate : 'forgotpassword.html',
+            templateData : {
+                otpcode : otp
+            }
+        }
+
+        await HF.sendMail(mailObj);
+        // ------------------------------------------------------------
+
+        return {message : "OTP sent successfully on the registered email."}
+    }
+
+    async userRestPassword(email, newPassword, otpcode){
+        const user = await userRepository.findByEmail(email);
+
+        if(!user){
+            return {message : "User not found.", status : 400}
+        }
+
+        if(!newPassword || newPassword.length < 6){
+            return {message : "Password is required and must be at least 6 characters long.", status : 400}
+        }
+        
+        // Check OTP match
+        if (user.resetOtp !== otpcode) {
+            return { valid: false, message: "Invalid OTP", status: 400 };
+        }
+
+        // Check expiry
+        if (new Date() > new Date(user.resetOtpExpiry)) {
+            return { valid: false, message: "OTP has expired", status: 400 };
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        let updateObj = {
+            resetOtp : null, 
+            resetOtpExpiry : null,
+            password: hashedPassword
+        }
+        
+        const response = await userRepository.updateUser(user.id, updateObj);
+        if(response) {
+            return {message : 'Password updated successfully.'};
+        }
+        return {message : 'Password not updated.', status : 500};
     }
 }

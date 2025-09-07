@@ -64,6 +64,14 @@ const User = sequelize.define('User', {
     created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
+    },
+    resetOtp:{
+        type: DataTypes.CHAR(6),
+        allowNull : true
+    },
+    resetOtpExpiry:{
+        type: DataTypes.DATE,
+        allowNull : true
     }
 }, {
     timestamps: false,

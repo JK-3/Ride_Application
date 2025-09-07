@@ -12,5 +12,7 @@ userRouter.get('/getme', authenticateUser, userController.getUserProfile, sendRe
 userRouter.post('/update', authenticateUser, userController.updateUserProfile, sendResponse);
 userRouter.post('/change-pass', authenticateUser, userController.changeUserPassword, sendResponse);
 userRouter.post('/logout', authenticateUser, userController.logoutUser, sendResponse);
+userRouter.post('/forgot-pass', userController.userForgotPassword, sendResponse);
+userRouter.post('/reset-pass', userController.userResetPassword, sendResponse);
 
 export default userRouter;
