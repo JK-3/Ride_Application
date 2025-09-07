@@ -138,9 +138,10 @@ export default class UserController{
                 throw new Error("User ID, old password, and new password are required");
             }
 
-            const {message} = await userService.changePassword(userId, oldpassword, newpassword);
+            const {message, status} = await userService.changePassword(userId, oldpassword, newpassword);
+
             req.responseData = {
-                status : 200,
+                status : status || 200,
                 message
             }
             next();
@@ -175,6 +176,81 @@ export default class UserController{
             };
             next();
             
+        } catch (error) {
+            req.responseData = {
+                status : 500,
+                error : error.message
+            }
+            next();
+        }
+    }
+
+    async userForgotPassword(req, res, next){
+        try {
+            const email = req.body?.email;
+            if (!email){
+                req.responseData = {
+                    status : 400,
+                    message : 'User email is required.',
+                    data : null 
+                }
+                next();
+            }
+
+            const {message, status} = await userService.userForgotPassword(email);
+            
+            if(message){
+                req.responseData = {
+                    status : status || 200,
+                    message : message,
+                    data : null 
+                }
+            }
+            next();
+
+        } catch (error) {
+            req.responseData = {
+                status : 500,
+                error : error.message
+            }
+            next();
+        }
+    }
+
+    async userResetPassword(req, res, next){
+        try {
+            const {email, newPassword, otpcode} = req.body;
+
+            if(!newPassword || !otpcode || !email){
+                let message = '';
+                if(!otpcode){
+                    message = 'OTP is required';
+                }
+                else if(!email){
+                    message = 'Email is required.'
+                }
+                else{
+                    message = 'New password is required';
+                }
+                req.responseData = {
+                    status : 400,
+                    message : message,
+                    data : null 
+                }
+                next();
+            }
+
+            const {message, status} = await userService.userRestPassword(email, newPassword, otpcode)
+
+            if(message){
+                req.responseData = {
+                    status : status || 200,
+                    message : message,
+                    data : null 
+                }
+            }
+            next();
+
         } catch (error) {
             req.responseData = {
                 status : 500,
