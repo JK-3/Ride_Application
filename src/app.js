@@ -1,7 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import indexRouter from './routes/index.js';
-import paymentRoutes from "./routes/paymentRoute.js";
 
 const app = express();
 

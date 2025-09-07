@@ -1,7 +1,7 @@
 import { Router } from "express";
 import userRouter from "./UserRoute.js";
 import driverRouter from "./DriverRoute.js";
-import paymentRouter from "./paymentRoute.js";
+import paymentRouter from "./PaymentRoute.js";
 import ratingRouter from "./RatingRoute.js";
 
 import rideRouter from "./RideRoute.js";
