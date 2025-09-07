@@ -16,17 +16,17 @@ const vehicleController = new VehicleController();
 driverRouter.use(authenticateUser,driverAuth);
 
 
-driverRouter.post("/vehicles", vehicleController.registerVehicle.bind(vehicleController), sendResponse);
-driverRouter.get("/vehicles", vehicleController.getMyVehicles.bind(vehicleController), sendResponse);
-driverRouter.put("/vehicles/:id", vehicleController.updateVehicle.bind(vehicleController), sendResponse);
-driverRouter.delete("/vehicles/:id", vehicleController.deleteVehicle.bind(vehicleController), sendResponse);
+driverRouter.post("/vehicles",authenticateUser,driverAuth, vehicleController.registerVehicle, sendResponse);
+driverRouter.get("/vehicles", vehicleController.getMyVehicles, sendResponse);
+driverRouter.put("/vehicles/:id", vehicleController.updateVehicle, sendResponse);
+driverRouter.delete("/vehicles/:id", vehicleController.deleteVehicle, sendResponse);
 
 
-driverRouter.get("/rides/requested", driverController.viewRequestedRides.bind(driverController), sendResponse);
-driverRouter.post("/rides/accept", driverController.acceptRide.bind(driverController), sendResponse);
-driverRouter.post("/rides/start", driverController.startRide.bind(driverController), sendResponse);
-driverRouter.post("/rides/complete", driverController.completeRide.bind(driverController), sendResponse);
-driverRouter.post("/rides/cancel", driverController.cancelRide.bind(driverController), sendResponse);
-driverRouter.get("/rides/my", driverController.viewMyRides.bind(driverController), sendResponse);
+driverRouter.get("/rides/requested", driverController.viewRequestedRides, sendResponse);
+driverRouter.post("/rides/accept", driverController.acceptRide, sendResponse);
+driverRouter.post("/rides/start", driverController.startRide, sendResponse);
+driverRouter.post("/rides/complete", driverController.completeRide, sendResponse);
+driverRouter.post("/rides/cancel", driverController.cancelRide, sendResponse);
+driverRouter.get("/rides/my", driverController.viewMyRides, sendResponse);
 
 export default driverRouter;
