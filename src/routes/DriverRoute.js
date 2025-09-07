@@ -4,6 +4,7 @@ import driverAuth from "../middlewares/auth/driverAuth.js";
 
 import DriverRideController from "../controllers/DriverRideController.js";
 import VehicleController from "../controllers/VehicleController.js";
+import authenticateUser from "../middlewares/auth/authenticateUser.js";
 
 const driverRouter = express.Router();
 
@@ -12,7 +13,7 @@ const driverController = new DriverRideController();
 const vehicleController = new VehicleController();
 
 
-driverRouter.use(driverAuth);
+driverRouter.use(authenticateUser,driverAuth);
 
 
 driverRouter.post("/vehicles", vehicleController.registerVehicle.bind(vehicleController), sendResponse);
