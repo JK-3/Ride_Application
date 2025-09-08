@@ -1,4 +1,4 @@
-
+// arjun
 import RideService from "../services/RideService.js";
 
 const rideService = new RideService();
@@ -55,19 +55,6 @@ export default class RideController {
       return res.status(400).json({ success: false, message: error.message });
     }
   }
-
-  async getMyRides(req, res) {
-    try {
-     const riderId = req.userDetails?.id; 
-      console.log(riderId)
-      const { data } = await rideService.getMyRides(riderId);
-
-      return res.status(200).json({ success: true, data });
-    } catch (error) {
-      return res.status(400).json({ success: false, message: error.message });
-    }
-  }
-
 
   async getRideById(req, res) {
     try {

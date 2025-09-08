@@ -1,3 +1,4 @@
+// sanjana
 import mongoose from "mongoose";
 
 const ratingSchema = new mongoose.Schema({

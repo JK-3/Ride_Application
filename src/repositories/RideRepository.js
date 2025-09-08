@@ -1,3 +1,4 @@
+// arjun
 import { Rides} from "../models/index.js";
 import { Op } from "sequelize";
 

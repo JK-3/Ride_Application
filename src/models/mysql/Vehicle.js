@@ -1,3 +1,4 @@
+// janhawi
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/mysql.js";
 
