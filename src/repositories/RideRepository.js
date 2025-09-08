@@ -3,12 +3,27 @@ import { Op } from "sequelize";
 
 class RideRepository {
   
-
 async insertRide(rideData) {
-    console.log(rideData)
-    return await Rides.create(rideData);
+  const activeRide = await Rides.findOne({
+    where: {
+      riderid: rideData.riderid,
+      status: "active",
+    }
+  });
+
+  if (activeRide) {
+    return {
+      message: "You already have an active ride. Please complete or cancel it before booking a new one."
+    };
+  }
+
+  console.log(rideData);
+  
+  return await Rides.create(rideData);
 }
+
   async findRideById(rideid) {
+
     return Rides.findByPk(rideid);
   }
 
