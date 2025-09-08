@@ -7,7 +7,9 @@ async insertRide(rideData) {
   const activeRide = await Rides.findOne({
     where: {
       riderid: rideData.riderid,
-      status: "active",
+      status: {
+          [Op.in]: ["accepted", "start","requested"],
+        },
     }
   });
 

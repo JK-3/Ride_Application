@@ -9,6 +9,8 @@ export default class RideService {
         
         status: "requested"
     });
+    console.log(ride);
+    
 
     return { data: ride, message: "Ride requested successfully" };
 }

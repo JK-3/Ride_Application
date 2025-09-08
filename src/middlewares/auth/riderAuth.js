@@ -13,7 +13,7 @@ const RideAuthentication = (req, res, next) => {
 
          req.userDetails = user;
 
-        next(); n 
+        next(); 
     } catch (error) {
         console.error(error);
         return res.status(400).json({ error: "Invalid user info" });
